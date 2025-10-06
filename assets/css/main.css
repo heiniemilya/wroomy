@@ -91,6 +91,7 @@ h1, .car-title{
   margin-top: 20px;
   color: var(--heading-color);
   text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 h2,
@@ -100,6 +101,7 @@ h5,
 h6 {
   color: var(--heading-color);
   font-family: var(--heading-font);
+  letter-spacing: 0.5px;
 }
 
 /* PHP Email Form Messages
@@ -159,8 +161,8 @@ h6 {
 --------------------------------------------------------------*/
 .header {
   color: var(--default-color);
-  background-color: var(--background-color);
-  padding: 20px 0;
+ /*  background-color: var(--background-color); */
+  padding: 15px 0;
   transition: all 0.5s;
   z-index: 997;
 }
@@ -176,10 +178,17 @@ h6 {
 
 .header .logo h1 {
   font-size: 23px;
-  margin: 0 15px;
+  margin: 0 ;
+  padding: 6px 20px;
   font-weight: 200;
   color: var(--heading-color);
 }
+
+.header .logo h1:hover {
+  color: #c063ab;
+  transition: all 0.2s ease-in;
+}
+
 
 @media (max-width: 480px) {
   .header .logo img {
@@ -212,9 +221,9 @@ h6 {
   order: 3;
 }
 
-.scrolled .header {
+/* .scrolled .header {
   box-shadow: 0px 0 18px rgba(0, 0, 0, 0.1);
-}
+} */
 
 /* Index Page Header
 ------------------------------*/
@@ -386,11 +395,19 @@ h6 {
 /* @media (max-width: 1199px) { */
   .mobile-nav-toggle {
     color: var(--nav-color);
-    font-size: 28px;
+    font-size: 30px;
     line-height: 0;
     margin-right: 10px;
     cursor: pointer;
-    transition: color 0.3s;
+  }
+
+  .bi-list{
+    padding: 5px 8px 3px 8px;
+  }
+
+  .bi-list:hover {
+    color: #c063ab;
+    transition: all 0.2s ease-in;
   }
 
   .navmenu {
@@ -615,14 +632,17 @@ h6 {
   padding-top: 0;
 }
 
-.footer .footer-links ul a {
-  color: color-mix(in srgb, var(--default-color), transparent 30%);
+.footer-links a {
+  color: color-mix(in srgb, var(--default-color), transparent 10%);
   display: inline-block;
   line-height: 1;
 }
 
-.footer .footer-links ul a:hover {
-  color: var(--accent-color);
+.footer-links a:hover {
+  color: #975494;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: all 0.2s ease-in;
 }
 
 .footer .footer-contact p {
@@ -871,7 +891,7 @@ section,
 .hero {
   width: 100%;
   position: relative;
-  padding: 100px 0 0 0;
+  padding: 60px 0 0 0;
   display: flex;
   align-items: center;
   overflow: hidden;
@@ -1063,7 +1083,7 @@ section,
 
 .car-img-container {
   width: 100%;          /* täyttää containerin leveyden */
-  max-width: 1100px;     /* rajoitetaan isoilla näytöillä */
+  max-width: 1000px;     /* rajoitetaan isoilla näytöillä */
   margin: 0 auto;       /* keskitys */
   aspect-ratio: 15/9;   /* korkeus skaalautuu leveyden mukaan */
   overflow: hidden;     /* leikkaa ylimääräiset reunat */
