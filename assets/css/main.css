@@ -1012,7 +1012,7 @@ section,
 
 .car {                    /* ulompi */
   position: relative;
-  min-height: 100px;
+  min-height: 70px;
 }
 
 .car-inner {              /* sisempi flex-kontaineri */
