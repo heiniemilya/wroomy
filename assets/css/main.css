@@ -83,7 +83,7 @@ a:hover {
   text-decoration: none;
 }
 
-h1{
+h1, .car-title{
   font-family: var(--heading-font-custom);
   font-size: 23px;
   font-weight: 200;
@@ -1076,7 +1076,7 @@ section,
   object-fit: cover;    /* täyttää containerin ilman vääristymistä */
 }
 
-#browseCarsBtn, #prevBtn, #nextBtn {
+#browseCarsBtn, .browseCarsBtn, #prevBtn, #nextBtn {
   color: var(--contrast-color);
   background: var(--accent-color);
   font-family: var(--default-font);
