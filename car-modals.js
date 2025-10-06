@@ -10,8 +10,8 @@ const fetchedDetailsCache = {}; // lisätiedot ja lisäkuvat tallessa
 const pageBodyTypesMap = {
   "henkiloautot.html": ["Sedan","Hatchback","Fastback","Liftback"],
   "maastoautot.html": ["Off-road vehicle","SUV","Crossover","SAV","SAC"],
-  "pakettiautot.html": ["Station wagon (estate)","Minivan","MPV","Van"],
-  "urheiluautot.html": ["Cabriolet","Coupe","Targa","Roadster","Grand Tourer","Coupe-Cabriolet"],
+  "pakettiautot.html": ["Minivan","MPV","Van"],
+  "urheiluautot.html": ["Cabriolet","Coupe","Targa","Roadster","Coupe-Cabriolet"],
   "lava-autot.html": ["Pick-up"],
   "miniautot.html": ["Quadricycle"]
 };
