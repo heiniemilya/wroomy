@@ -1,12 +1,13 @@
 const container = document.getElementById("car-container");
 const loadMoreBtn = document.getElementById("loadMoreBtn");
 
+// --- Välimuisti ja tilamuuttujat ---
 let cachedCars = [];
 let currentIndex = 0;
 let currentPage = 1;
 const fetchedDetailsCache = {}; // lisätiedot ja lisäkuvat tallessa
 
-// --- Sivukohtaiset bodytypet ---
+// --- Sivukohtaiset korimallit ---
 const pageBodyTypesMap = {
   "henkiloautot.html": ["Sedan","Hatchback","Fastback","Liftback"],
   "maastoautot.html": ["Off-road vehicle","SUV","Crossover","SAV","SAC"],
@@ -54,14 +55,6 @@ const manualCarsMap = {
     {id:"man3",title:"Microcar M.Go",image:"https://upload.wikimedia.org/wikipedia/commons/4/42/Microcar_M.GO_Dynamic_%28MSP15%29.JPG",info:{"Valmistettu":"2022","Korimalli":"Quadricycle",Ovia:2,Istuimia:2},extraImages:[]},
     {id:"man4",title:"Aixam Mega",image:"https://upload.wikimedia.org/wikipedia/commons/e/e4/Aixam_Mega.JPG",info:{"Valmistettu":"2021","Korimalli":"Quadricycle",Ovia:2,Istuimia:2},extraImages:[]}
   ]
-
-
-
-
-
-
-
-  // Lisää tarvittaessa muut sivut
 };
 
 // --- Hae nykyinen sivu ---
@@ -84,19 +77,24 @@ function createCarCard(car){
   return card;
 }
 
+// --- Näytä manuaaliset aluksi ---
 function displayInitialImages(){
   manualCars.forEach(car => container.appendChild(createCarCard(car)));
 }
 
 // --- Hae autoja API:sta ---
 async function fetchCarsFromAPI(){
-  const randomBodyCount=Math.floor(Math.random()*2)+1;
+  let allResults = [];
+  // Valitaan satunnainen määrä korimalleja (1-2)
+  const randomBodyCount = bodyTypes.length > 1 ? Math.floor(Math.random() * 2) + 1 : 1;
   const selectedBodies=[];
+  // Varmistetaan, että valitut korimallit ovat uniikkeja
   while(selectedBodies.length<randomBodyCount){
     const r=bodyTypes[Math.floor(Math.random()*bodyTypes.length)];
     if(!selectedBodies.includes(r)) selectedBodies.push(r);
   }
 
+  // API-asetukset
   const options={
     method:"GET",
     headers:{
@@ -105,17 +103,21 @@ async function fetchCarsFromAPI(){
     }
   };
 
+  // Placeholder-kuva
   const placeholder="https://www.auto-data.net/img/no.jpg";
+  // Väliaikainen setti duplikaattien tarkistukseen
   const seenKeys = new Set();
-  let allResults=[];
-
+  // Haetaan valituilla korimalleilla
   for(const body of selectedBodies){
     const res = await fetch(`https://cars-database-with-image.p.rapidapi.com/api/search?q=${body}&page=${currentPage}`, options);
     const data = await res.json();
+    // Suodatetaan tulokset
     if(data.results){
+      // Poimitaan vain uniikit, ei placeholder-kuvia
       data.results.forEach(car=>{
         if(car.image && car.image!==placeholder){
           const key = `${car.title}|${car.image}`;
+          // Tarkistetaan onko jo nähty
           if(!seenKeys.has(key)){
             seenKeys.add(key);
             allResults.push({id:car.id,title:car.title,image:car.image});
@@ -124,12 +126,12 @@ async function fetchCarsFromAPI(){
       });
     }
   }
-
+  // Lisätään välimuistiin
   cachedCars.push(...allResults);
   currentPage++;
 }
 
-// --- Näytä seuraavat ---
+// --- Näytä seuraavat 4 autoa välimuistista ---
 function showNextCars(count=4){
   const nextBatch=cachedCars.slice(currentIndex,currentIndex+count);
   nextBatch.forEach(car => container.appendChild(createCarCard(car)));
@@ -139,8 +141,10 @@ function showNextCars(count=4){
 
 // --- Näytä lisää painike ---
 async function handleLoadMore(){
+  // Estetään moninkertainen klikkaus
   loadMoreBtn.disabled=true;
   loadMoreBtn.textContent="Ladataan...";
+  // Haetaan lisää autoja apista, jos tarvitaan
   if(currentIndex>=cachedCars.length){
     await fetchCarsFromAPI();
   }
@@ -151,20 +155,24 @@ async function handleLoadMore(){
 
 // --- Modaali ---
 async function openCarModal(car){
+  // Haetaan modaalin elementit
   const modalTitle=document.getElementById("carModalLabel");
   const modalMainImage=document.getElementById("modalMainImage");
   const modalExtraImages=document.getElementById("modalExtraImages");
   const modalInfo=document.getElementById("modalInfo");
-
+  // Tyhjennetään vanhat tiedot
   modalTitle.textContent = car.title.replace(/\s*\(.*?\)/g, '').trim();
   modalMainImage.src=car.image;
   modalExtraImages.innerHTML="";
   modalInfo.innerHTML="";
+  modalMainImage.classList.remove("zoomed");
 
+  // Jos manuaalinen auto, näytetään suoraan tiedot
   if(car.id.startsWith("man")){
     const infoHTML=Object.entries(car.info).map(([k,v])=>`<b>${k}:</b> ${v}`).join("<br>");
     modalInfo.innerHTML=infoHTML;
   } else {
+    // Muuten haetaan lisätiedot API:sta, jos ei ole jo haettu
     if(!fetchedDetailsCache[car.id]){
       const options={
         method:"GET",
@@ -173,16 +181,18 @@ async function openCarModal(car){
           "x-rapidapi-host":"cars-database-with-image.p.rapidapi.com"
         }
       };
+      // Haetaan tiedot
       try{
         const res=await fetch(`https://cars-database-with-image.p.rapidapi.com/api/car/${car.id}`,options);
         const data=await res.json();
         const general=data.specifications.general_information || {};
 
-        // Poimitaan vuodet Start/End
+        // Poimitaan valmistusvuodet Start/End
         const startMatch = general["Start of production"]?.match(/\d{4}/);
         const endMatch = general["End of production"]?.match(/\d{4}/);
         const production = startMatch ? (endMatch ? `${startMatch[0]} – ${endMatch[0]}` : startMatch[0]) : "Ei tietoa";
 
+        // Muut tiedot
         const info={
           "Valmistettu": production,
           "Korimalli": general["Body type"] || "Ei tietoa",
@@ -190,6 +200,7 @@ async function openCarModal(car){
           Istuimia: general.Seats || "Ei tietoa"
         };
 
+        // Poimitaan lisäkuvat (max 6)  
         const extraImages=(data.other_images||[]).slice(0,6).map(img=>img.src);
         fetchedDetailsCache[car.id]={info,extraImages};
       }catch(e){
@@ -198,21 +209,22 @@ async function openCarModal(car){
       }
     }
 
+    // Täytetään modaali tiedoilla
     const {info, extraImages}=fetchedDetailsCache[car.id];
+    // Lisäkuvat
     extraImages.forEach(src=>{
       const thumb=document.createElement("img");
       thumb.src=src;
       thumb.className="img-thumbnail";
-      thumb.style.width="80px";
+      thumb.style.width="100px";
       thumb.style.cursor="pointer";
       thumb.addEventListener("click",()=>modalMainImage.src=src);
       modalExtraImages.appendChild(thumb);
     });
-
+    // Jos ei lisäkuvia, piilotetaan osio
     const infoHTML=Object.entries(info).map(([k,v])=>`<b>${k}:</b> ${v}`).join("<br>");
     modalInfo.innerHTML=infoHTML;
   }
-
   const modal=new bootstrap.Modal(document.getElementById("carModal"));
   modal.show();
 }

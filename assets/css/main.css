@@ -541,6 +541,16 @@ h6 {
   list-style: none;
   padding-bottom: 15px;
 }
+.footer-links li:hover{
+  transform: scale(1.06);
+  transition: all 0.2s ease-in;
+}
+
+.footer-links img{
+  width: 25px;
+  margin-right: 10px;
+  filter: brightness(0) saturate(100%) invert(29%) sepia(14%) saturate(660%) hue-rotate(146deg) brightness(92%) contrast(89%);
+}
 
 .footer {
   color: var(--default-color);
@@ -633,16 +643,12 @@ h6 {
 }
 
 .footer-links a {
-  color: color-mix(in srgb, var(--default-color), transparent 10%);
+  color: #3e7472;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.2px;
   display: inline-block;
   line-height: 1;
-}
-
-.footer-links a:hover {
-  color: #975494;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  transition: all 0.2s ease-in;
 }
 
 .footer .footer-contact p {
@@ -700,11 +706,12 @@ h6 {
 
 .footer .copyright p {
   margin-bottom: 0;
+  font-size: 11px;
 }
 
 .footer .credits {
   margin-top: 6px;
-  font-size: 13px;
+  font-size: 11px;
 }
 
 /*--------------------------------------------------------------
