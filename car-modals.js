@@ -20,9 +20,9 @@ const pageBodyTypesMap = {
 // --- Sivukohtaiset manuaaliset autot ---
 const manualCarsMap = {
   "henkiloautot.html": [
-    {id:"man1",title:"Kia Niro",image:"img/cars/kia-niro-hyundai-motor-group-AoqTa019vFw-unsplash.jpg",info:{"Valmistettu":"2023","Korimalli":"SUV",Ovia:5,Istuimia:5},extraImages:[]},
+    {id:"man1",title:"Kia Niro",image:"img/cars/kia-niro-hyundai-motor-group-AoqTa019vFw-unsplash.webp",info:{"Valmistettu":"2023","Korimalli":"SUV",Ovia:5,Istuimia:5},extraImages:[]},
     {id:"man2",title:"Opel Astra",image:"img/cars/opel-astra-youssef-d-DkGUn0Y1VzA-unsplash.webp",info:{"Valmistettu":"2022","Korimalli":"Hatchback",Ovia:5,Istuimia:5},extraImages:[]},
-    {id:"man3",title:"Volkswagen Passat",image:"img/cars/passat-pexels-esmihel-15256362.jpg",info:{"Valmistettu":"2021","Korimalli":"Sedan",Ovia:5,Istuimia:5},extraImages:[]},
+    {id:"man3",title:"Volkswagen Passat",image:"img/cars/passat-pexels-esmihel-15256362.webp",info:{"Valmistettu":"2021","Korimalli":"Sedan",Ovia:5,Istuimia:5},extraImages:[]},
     {id:"man4",title:"Toyota Yaris",image:"img/cars/yaris-heri-susilo-kwgTG2TETPs-unsplash.webp",info:{"Valmistettu":"2020","Korimalli":"Hatchback",Ovia:5,Istuimia:5},extraImages:[]}
   ],
   "pakettiautot.html": [
