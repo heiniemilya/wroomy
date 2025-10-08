@@ -1167,6 +1167,9 @@ section,
     grid-template-columns: 1fr;
   } 
 }
+.modal-title{
+  font-size: 40px;
+}
 
 .car-card { 
   background: #df44821d; 
