@@ -200,28 +200,31 @@
           <button id="loadMoreBtn" class="browseCarsBtn my-5" style="background-color:  #0084B5;">Näytä lisää ▶▶▶</button>
           </div>
           
-          <!-- Modal -->
-          <div class="modal fade" id="carModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg">
-              <div class="modal-content">
-                <div class="modal-header pt-3 pb-2">
-                  <h2 class="modal-title" id="carModalLabel" style="font-size: 40px; "></h2>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Sulje"></button>
+         <!-- Modal -->
+         <div class="modal fade" id="carModal" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+              <div class="modal-header pt-3 pb-2">
+                <h2 class="modal-title" id="carModalLabel" style="font-size: 40px;">Auton tiedot</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Sulje"></button>
+              </div>
+              <div class="modal-body text-center p-2">
+                <div class="zoom-container">
+                  <img id="modalMainImage" src="" alt="Auto" class="img-fluid mb-3"/>
+                  <button id="zoomBtn" class="zoom-btn" aria-label="Suurenna kuva">
+                    <i class="bi bi-zoom-in" aria-hidden="true"></i>
+                  </button>
                 </div>
-                <div class="modal-body text-center p-2">
-                  <div class="zoom-container">
-                    <img id="modalMainImage" src="" alt="Auto" class="img-fluid mb-3"/>
-                    <button id="zoomBtn" class="zoom-btn"><i class="bi bi-zoom-in"></i></button>
-                  </div>
-                  <div id="modalExtraImages" class="d-flex flex-wrap justify-content-center gap-2 mb-3"></div>
-                  <div id="modalInfo" class="text-start"></div>
-                </div>
-                <div class="modal-footer">
-                  <button id="browseCarsBtn" class="btn" data-bs-dismiss="modal" style="background-color: #0084B5;">Sulje</button>
-                </div>
+                <div id="modalExtraImages" class="d-flex flex-wrap justify-content-center gap-2 mb-3"></div>
+                <div id="modalInfo" class="text-start"></div>
+              </div>
+              <div class="modal-footer">
+                <button id="browseCarsBtn" class="btn" data-bs-dismiss="modal" style="background-color: #518611e0;">Sulje</button>
               </div>
             </div>
           </div>
+        </div>
+        
       </section>
       <!-- /Car images Section -->
     </div>
