@@ -19,67 +19,124 @@
       }
     };
   
-    // --- SATUNNAINEN AUTOSIVU HAKU ---
-    async function fetchRandomCars() {
-      try {
-        const randomPage = Math.floor(Math.random() * 50) + 1; // satunnainen sivu 1–50
-        const response = await fetch(`https://cars-database-with-image.p.rapidapi.com/api/search?q=&page=${randomPage}`, options);
-        const data = await response.json();
-  
-        if (!data.results?.length) {
-          titleEl.innerText = "Uusia autoja ei saatavilla juuri nyt";
-          return;
-        }
-  
-        const placeholder = "https://www.auto-data.net/img/no.jpg";
-        const seen = new Set();
-  
-        cars = data.results.filter(car => {
-          // suodatetaan pois duplikaatit ja placeholder-kuvat
-          const baseModel = car.title?.split('(')[0].trim();
-          if (!car.image || car.image === placeholder || seen.has(baseModel)) return false;
-          seen.add(baseModel);
-          return true;
-        });
-  
-        if (!cars.length) {
-          titleEl.innerText = "Sopivia autoja ei löytynyt";
-          return;
-        }
-  
-        currentIndex = Math.floor(Math.random() * cars.length);
-        showCar(currentIndex);
-      } catch (error) {
-        console.error("Virhe haettaessa autoja:", error);
-        titleEl.innerText = "Autojen tietoja ei saatu ladattua";
+  // --- SATUNNAINEN AUTOSIVU HAKU ---
+  async function fetchRandomCars() {
+    try {
+      browseBtn.disabled = true;
+      browseBtn.textContent = "Ladataan...";
+
+      const randomPage = Math.floor(Math.random() * 50) + 1; // satunnainen sivu 1–50
+      const response = await fetch(`https://cars-database-with-image.p.rapidapi.com/api/search?q=&page=${randomPage}`, options);
+      const data = await response.json();
+
+      if (!data.results?.length) {
+        titleEl.innerText = "Uusia autoja ei saatavilla juuri nyt";
+        browseBtn.textContent = "Selaa";
+        browseBtn.disabled = false;
+        return;
       }
-    }
-  
-    function showCar(index) {
-      if (!cars.length) return;
-      const car = cars[index];
-      const title = car.title?.replace(/\(.*?\)/g, '').trim() || "Tuntematon auto";
-      titleEl.innerText = title;
-      imgEl.src = car.image;
-    }
-  
-    // --- PAINIKKEIDEN TOIMINNOT ---
-    browseBtn.addEventListener('click', async () => {
-      browseBtn.style.display = "none";   // piilotetaan selaa-nappi
-      carDisplay.style.display = "block"; // näytetään autot
-      await fetchRandomCars();
-    });
-  
-    prevBtn.addEventListener('click', () => {
-      if (!cars.length) return;
-      currentIndex = (currentIndex - 1 + cars.length) % cars.length;
+
+      const placeholder = "https://www.auto-data.net/img/no.jpg";
+      const seen = new Set();
+
+      cars = data.results.filter(car => {
+        const baseModel = car.title?.split('(')[0].trim();
+        if (!car.image || car.image === placeholder || seen.has(baseModel)) return false;
+        seen.add(baseModel);
+        return true;
+      });
+
+      if (!cars.length) {
+        titleEl.innerText = "Sopivia autoja ei löytynyt";
+        browseBtn.textContent = "Selaa";
+        browseBtn.disabled = false;
+        return;
+      }
+
+      currentIndex = Math.floor(Math.random() * cars.length);
       showCar(currentIndex);
-    });
+    } catch (error) {
+      console.error("Virhe haettaessa autoja:", error);
+      titleEl.innerText = "Autojen tietoja ei saatu ladattua";
+    } finally {
+      browseBtn.textContent = "Selaa";
+      browseBtn.disabled = false;
+    }
+  }
+
+  function showCar(index) {
+    if (!cars.length) return;
+    const car = cars[index];
+    const title = car.title?.replace(/\(.*?\)/g, '').trim() || "Tuntematon auto";
+    titleEl.innerText = title;
+    imgEl.src = car.image;
+  }
+
+  // --- PAINIKKEIDEN TOIMINNOT ---
+
+  browseBtn.addEventListener('click', async () => {
+    browseBtn.disabled = true;
+    browseBtn.textContent = "Ladataan...";
   
-    nextBtn.addEventListener('click', () => {
-      if (!cars.length) return;
-      currentIndex = (currentIndex + 1) % cars.length;
-      showCar(currentIndex);
-    });
+    // Haetaan satunnainen auto
+    await fetchRandomCars();
+  
+    // Odotetaan, että kuva latautuu
+    imgEl.onload = () => {
+      browseBtn.style.display = "none";      // piilotetaan “Näytä seuraava” nappi
+      carDisplay.style.display = "block";    // näytetään edellinen/seuraava-napit
+      imgEl.onload = null;                   // estetään moninkertainen triggeröinti
+    };
+  });
+  
+
+  // edellinen-nappi
+  prevBtn.addEventListener('click', () => {
+    if (!cars.length) return;
+
+    prevBtn.disabled = true;
+    nextBtn.disabled = true;         
+    prevBtn.style.opacity = "0.5";
+    nextBtn.style.opacity = "0.5";
+
+    const newIndex = (currentIndex - 1 + cars.length) % cars.length;
+    const newImageSrc = cars[newIndex].image;
+
+    imgEl.onload = () => {
+      currentIndex = newIndex;        
+      prevBtn.style.opacity = "1";
+      nextBtn.style.opacity = "1";
+      prevBtn.disabled = false;
+      nextBtn.disabled = false;
+      imgEl.onload = null;           
+    };
+
+    imgEl.src = newImageSrc;          
+  });
+
+  // seuraava-nappi
+  nextBtn.addEventListener('click', () => {
+    if (!cars.length) return;
+
+    prevBtn.disabled = true;
+    nextBtn.disabled = true;
+    prevBtn.style.opacity = "0.5";
+    nextBtn.style.opacity = "0.5";
+
+    const newIndex = (currentIndex + 1) % cars.length;
+    const newImageSrc = cars[newIndex].image;
+
+    imgEl.onload = () => {
+      currentIndex = newIndex;
+      prevBtn.style.opacity = "1";
+      nextBtn.style.opacity = "1";
+      prevBtn.disabled = false;
+      nextBtn.disabled = false;
+      imgEl.onload = null;
+    };
+
+    imgEl.src = newImageSrc;
+  });
+
 
 ////////////////////// SATUNNAISET AUTOT /////////////////////

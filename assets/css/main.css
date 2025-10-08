@@ -415,14 +415,20 @@ h6 {
     z-index: 9997;
   }
 
+  .navmenu img {
+    width: 30px;
+    margin-right: 20px;
+    filter: brightness(0) saturate(100%) invert(100%) sepia(100%) saturate(0%) hue-rotate(221deg) brightness(109%) contrast(101%);
+  }
+
   .navmenu ul {
     max-width: 350px;
     display: none;
     list-style: none;
     position: absolute;
-    top: 0px;       /* yläreuna */
-    right: 0px;      /* oikea reuna kiinni reunassa */
-    bottom: 0px;   /* alareuna */
+    top: 0px;      
+    right: 0px;     
+    bottom: 0px;  
     padding: 50px 0;
     margin: 0;
     background-color: var(--nav-mobile-background-color);
@@ -441,7 +447,6 @@ h6 {
     font-weight: 500;
     display: flex;
     align-items: center;
-    justify-content: space-between;
     white-space: nowrap;
     transition: 0.3s;
   }
@@ -465,6 +470,11 @@ h6 {
   .navmenu a i:hover,
   .navmenu a:focus i:hover {
     color: var(--accent-color);
+  }
+
+  .navmenu .dropdown li:hover{
+    color: var(--nav-hover-color);
+    filter: brightness(0) saturate(100%) invert(86%) sepia(28%) saturate(914%) hue-rotate(275deg) brightness(93%) contrast(91%);
   }
 
   .navmenu a:hover,
@@ -1017,21 +1027,21 @@ section,
 # Car Navigation Section
 --------------------------------------------------------------*/
 
-.car {                    /* ulompi */
+.car {                    
   position: relative;
   min-height: 60px;
 }
 
-.car-inner {              /* sisempi flex-kontaineri */
+.car-inner {             
   display: flex;
   justify-content: center;
-  align-items: flex-end;  /* puskee car-iconin alas */
+  align-items: flex-end;  
   height: 100%;
 }
 
 .car-icon {
-  width: 90px;            /* rajaa icon-laatikon leveydeksi */
-  text-align: center;     /* varmuudeksi */
+  width: 90px;           
+  text-align: center;    
 }
 
 .car-active {
@@ -1051,10 +1061,9 @@ section,
   background-color: #517D7B;
 }
 
-/* Käännä alemman rivin autot mobiilissa */
 @media (max-width: 575.98px) {
  .flip {
-    transform: scaleX(-1); /* vaakasuuntainen peilaus */
+    transform: scaleX(-1); 
   }
 }
 
@@ -1064,7 +1073,7 @@ section,
 
 .car-nav svg {
   transition: all 0.3s ease-in-out;
-  transform-origin: bottom center; /* skaalaus lähtee alakulmasta */
+  transform-origin: bottom center; 
 }
 
 .car-nav svg:hover{
@@ -1085,22 +1094,22 @@ section,
 
 
 /*--------------------------------------------------------------
-# Browse Cars Section
+# Browse Cars 
 --------------------------------------------------------------*/
 
 .car-img-container {
-  width: 100%;          /* täyttää containerin leveyden */
-  max-width: 1000px;     /* rajoitetaan isoilla näytöillä */
-  margin: 0 auto;       /* keskitys */
-  aspect-ratio: 15/9;   /* korkeus skaalautuu leveyden mukaan */
-  overflow: hidden;     /* leikkaa ylimääräiset reunat */
+  width: 100%;        
+  max-width: 1000px;    
+  margin: 0 auto;       
+  aspect-ratio: 15/9;   
+  overflow: hidden;    
   display: block;
 }
 
 .car-img-container img {
   width: 100%;
   height: 100%;
-  object-fit: cover;    /* täyttää containerin ilman vääristymistä */
+  object-fit: cover;    
 }
 
 #browseCarsBtn, .browseCarsBtn, #prevBtn, #nextBtn {
@@ -1123,6 +1132,105 @@ section,
   background: #a34b8e;
   box-shadow: 0 8px 28px rgba(0, 0, 0, 0.1);
 }
+
+#car-display {
+  display: none;
+}
+
+/*--------------------------------------------------------------
+# Car Modals
+--------------------------------------------------------------*/
+
+.img-thumbnail {
+  transition: opacity 0.3s ease;
+}
+
+.active-thumbnail {
+  opacity: 0.5;
+}
+
+#car-container { 
+  display: grid; 
+  grid-template-columns: repeat(2, 1fr); 
+  gap: 1rem; margin-top: 1rem; 
+}
+
+@media (max-width: 555px) { 
+  #car-container {
+    grid-template-columns: 1fr;
+  } 
+}
+
+.car-card { 
+  background: #df44821d; 
+  border-radius: 30px; 
+  overflow: hidden; 
+  padding-bottom: 0.5rem; 
+  cursor: pointer; 
+  transition: transform 0.2s ease;  
+}
+
+.car-card .car-title {
+  color: rgb(30, 28, 28); 
+  font-size: 1.2rem; 
+  text-align: center; 
+  padding:0; 
+  margin:10px 0 5px 0;
+}
+
+.car-card img { 
+  width: 100%; 
+  height: 200px; 
+  object-fit: cover; 
+  display: block;
+}
+
+.modal-body img { 
+  width: 100vw; 
+  height: auto; 
+  object-fit: contain; 
+}
+
+#loadMoreBtn:disabled {
+  opacity: 0.5; 
+  cursor: not-allowed; 
+}
+.zoom-container { 
+  position: relative; 
+  display: inline-block; 
+}
+.zoom-btn { 
+  position: absolute; 
+  top: 10px; 
+  right: 10px; 
+  background: rgba(255, 255, 255, 0.5); 
+  color: rgb(0, 0, 0); 
+  border: none; 
+  border-radius: 50%; 
+  width: 36px; 
+  height: 36px; 
+  font-size: 18px; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  cursor: pointer; 
+  transition: all 0.2s ease; 
+}
+.zoom-btn:hover { 
+  background: rgba(255, 255, 255); 
+}
+
+.zoomed { 
+  transform: scale(1.6); 
+  transition: transform 0.3s ease; 
+  cursor: zoom-out; 
+}
+
+
+
+
+
+
 
 
 /*--------------------------------------------------------------

@@ -53,12 +53,12 @@
           <li><a href="index.html#random-car">Selaa kaikkia autoja</a></li>
           <li class="dropdown custom-toggle"><a href="#"><span>Selaa autotyypin mukaan</span> <i class="bi bi-caret-down-fill toggle-dropdown"></i></a>
             <ul>
-              <li><a href="henkiloautot.html">Henkilöautot</a></li>
-              <li><a href="pakettiautot.html">Pakettiautot</a></li>
-              <li><a href="urheiluautot.html">Urheiluautot</a></li>
-              <li><a href="lava-autot.html" class="active">Lava-autot</a></li>
-              <li><a href="maastoautot.html">Maastoautot</a></li>
-              <li><a href="miniautot.html">Miniautot</a></li>
+              <li><a href="henkiloautot.html"><img src="img/henkiloautot.svg">Henkilöautot</a></li>
+              <li><a href="pakettiautot.html"><img src="img/pakettiautot.svg">Pakettiautot</a></li>
+              <li><a href="urheiluautot.html"><img src="img/nopeat.svg">Urheiluautot</a></li>
+              <li><a href="maastoautot.html"><img src="img/maastoautot.svg">Maastoautot</a></li>
+              <li><a href="lava-autot.html"><img src="img/lava-autot.svg">Lava-autot</a></li>
+              <li><a href="miniautot.html"><img src="img/miniautot.svg">Miniautot</a></li>
             </ul>
             <!-- <li class="dropdown"><a href="#"><span>Selaa automerkin mukaan</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
             <ul>
@@ -192,21 +192,6 @@
       <!-- /Page headline Section -->
 
       <!-- Car images Section -->
-      <style>
-        #car-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-top: 1rem; }
-        @media (max-width: 555px) { #car-container {grid-template-columns: 1fr;}}
-        .car-card { background: #df44821d; border-radius: 30px; overflow: hidden; padding-bottom: 0.5rem; cursor: pointer; transition: transform 0.2s ease;  }
-        .car-card .car-title { color: rgb(30, 28, 28); font-size: 1.2rem; text-align: center; padding:0; margin:10px 0 5px 0;}
-        .car-card:hover { transform: scale(1.03); }
-        .car-card img { width: 100%; height: 250px; object-fit: cover; display: block;}
-        .modal-body img { width: 100vw; height: auto; object-fit: contain; }
-        #loadMoreBtn:disabled { opacity: 0.5; cursor: not-allowed; }
-        .zoom-container { position: relative; display: inline-block; }
-        .zoom-btn { position: absolute; top: 10px; right: 10px; background: rgba(255, 255, 255, 0.5); color: rgb(0, 0, 0); border: none; border-radius: 50%; width: 36px; height: 36px; font-size: 18px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.2s ease; }
-        .zoom-btn:hover { background: rgba(255, 255, 255); }
-        .zoomed { transform: scale(1.6); transition: transform 0.3s ease; cursor: zoom-out; }
-        </style>
-        
       <section class="container-fluid py-4">
         <div id="car-gallery" class="row g-3" ></div>
         

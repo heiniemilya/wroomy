@@ -87,7 +87,7 @@ async function fetchCarsFromAPI(){
   let allResults = [];
   // Valitaan satunnainen määrä korimalleja (1-2)
   const randomBodyCount = bodyTypes.length > 1 ? Math.floor(Math.random() * 2) + 1 : 1;
-  const selectedBodies=[];
+  const selectedBodies = [];
   // Varmistetaan, että valitut korimallit ovat uniikkeja
   while(selectedBodies.length<randomBodyCount){
     const r=bodyTypes[Math.floor(Math.random()*bodyTypes.length)];
@@ -104,7 +104,7 @@ async function fetchCarsFromAPI(){
   };
 
   // Placeholder-kuva
-  const placeholder="https://www.auto-data.net/img/no.jpg";
+  const placeholder = "https://www.auto-data.net/img/no.jpg";
   // Väliaikainen setti duplikaattien tarkistukseen
   const seenKeys = new Set();
   // Haetaan valituilla korimalleilla
@@ -114,13 +114,19 @@ async function fetchCarsFromAPI(){
     // Suodatetaan tulokset
     if(data.results){
       // Poimitaan vain uniikit, ei placeholder-kuvia
-      data.results.forEach(car=>{
-        if(car.image && car.image!==placeholder){
-          const key = `${car.title}|${car.image}`;
+      data.results.forEach(car => {
+        if (car.image && car.image !== placeholder) {
+          const key = `${car.title.trim().toLowerCase()}|${car.content?.slice(0,30) || ""}`;
+          const imageKey = car.image.trim().toLowerCase();
+          const uniqueKey = `${nameKey}|${imageKey}`;
           // Tarkistetaan onko jo nähty
-          if(!seenKeys.has(key)){
-            seenKeys.add(key);
-            allResults.push({id:car.id,title:car.title,image:car.image});
+          if (!seenKeys.has(uniqueKey)) {
+            seenKeys.add(uniqueKey);
+            allResults.push({
+              id: car.id,
+              title: car.title,
+              image: car.image
+            });
           }
         }
       });
@@ -132,8 +138,8 @@ async function fetchCarsFromAPI(){
 }
 
 // --- Näytä seuraavat 4 autoa välimuistista ---
-function showNextCars(count=4){
-  const nextBatch=cachedCars.slice(currentIndex,currentIndex+count);
+function showNextCars(count = 4){
+  const nextBatch = cachedCars.slice(currentIndex,currentIndex+count);
   nextBatch.forEach(car => container.appendChild(createCarCard(car)));
   currentIndex += nextBatch.length;
 }
@@ -142,39 +148,39 @@ function showNextCars(count=4){
 // --- Näytä lisää painike ---
 async function handleLoadMore(){
   // Estetään moninkertainen klikkaus
-  loadMoreBtn.disabled=true;
+  loadMoreBtn.disabled = true;
   loadMoreBtn.textContent="Ladataan...";
   // Haetaan lisää autoja apista, jos tarvitaan
-  if(currentIndex>=cachedCars.length){
+  if(currentIndex >= cachedCars.length){
     await fetchCarsFromAPI();
   }
   showNextCars();
-  loadMoreBtn.disabled=false;
-  loadMoreBtn.textContent="Näytä lisää";
+  loadMoreBtn.disabled = false;
+  loadMoreBtn.textContent = "Näytä lisää";
 }
 
 // --- Modaali ---
 async function openCarModal(car){
   // Haetaan modaalin elementit
-  const modalTitle=document.getElementById("carModalLabel");
-  const modalMainImage=document.getElementById("modalMainImage");
-  const modalExtraImages=document.getElementById("modalExtraImages");
-  const modalInfo=document.getElementById("modalInfo");
+  const modalTitle = document.getElementById("carModalLabel");
+  const modalMainImage = document.getElementById("modalMainImage");
+  const modalExtraImages = document.getElementById("modalExtraImages");
+  const modalInfo = document.getElementById("modalInfo");
   // Tyhjennetään vanhat tiedot
   modalTitle.textContent = car.title.replace(/\s*\(.*?\)/g, '').trim();
-  modalMainImage.src=car.image;
-  modalExtraImages.innerHTML="";
-  modalInfo.innerHTML="";
+  modalMainImage.src = car.image;
+  modalExtraImages.innerHTML = "";
+  modalInfo.innerHTML = "";
   modalMainImage.classList.remove("zoomed");
 
   // Jos manuaalinen auto, näytetään suoraan tiedot
   if(car.id.startsWith("man")){
     const infoHTML=Object.entries(car.info).map(([k,v])=>`<b>${k}:</b> ${v}`).join("<br>");
-    modalInfo.innerHTML=infoHTML;
+    modalInfo.innerHTML = infoHTML;
   } else {
     // Muuten haetaan lisätiedot API:sta, jos ei ole jo haettu
     if(!fetchedDetailsCache[car.id]){
-      const options={
+      const options = {
         method:"GET",
         headers:{
           "x-rapidapi-key":"df8ba94c97mshb76f9c896aa0450p1ce858jsnee6b335c4888",
@@ -183,9 +189,9 @@ async function openCarModal(car){
       };
       // Haetaan tiedot
       try{
-        const res=await fetch(`https://cars-database-with-image.p.rapidapi.com/api/car/${car.id}`,options);
-        const data=await res.json();
-        const general=data.specifications.general_information || {};
+        const res = await fetch(`https://cars-database-with-image.p.rapidapi.com/api/car/${car.id}`,options);
+        const data = await res.json();
+        const general = data.specifications.general_information || {};
 
         // Poimitaan valmistusvuodet Start/End
         const startMatch = general["Start of production"]?.match(/\d{4}/);
@@ -201,26 +207,57 @@ async function openCarModal(car){
         };
 
         // Poimitaan lisäkuvat (max 6)  
-        const extraImages=(data.other_images||[]).slice(0,6).map(img=>img.src);
-        fetchedDetailsCache[car.id]={info,extraImages};
+        const extraImages = (data.other_images||[]).slice(0,6).map(img=>img.src);
+        fetchedDetailsCache[car.id] = {info,extraImages};
       }catch(e){
         console.error("Virhe haettaessa lisätietoja",e);
-        fetchedDetailsCache[car.id]={info:{},extraImages:[]};
+        fetchedDetailsCache[car.id] = {info:{},extraImages:[]};
       }
     }
 
     // Täytetään modaali tiedoilla
-    const {info, extraImages}=fetchedDetailsCache[car.id];
+    const { info, extraImages } = fetchedDetailsCache[car.id];
+
+    // Pidetään kirjaa aktiivisesta pikkukuvasta
+    let activeThumb = null;
+
+    // Jos lisäkuvia on, lisätään pääkuva niiden alkuun
+    if (extraImages && extraImages.length > 0) {
+      const mainThumb = document.createElement("img");
+      mainThumb.src = modalMainImage.src; // pääkuva
+      mainThumb.className = "img-thumbnail";
+      mainThumb.style.width = "100px";
+      mainThumb.style.cursor = "pointer";
+      mainThumb.classList.add("active-thumbnail");
+      activeThumb = mainThumb;
+
+      mainThumb.addEventListener("click", () => {
+        modalMainImage.src = modalMainImage.src;
+        if (activeThumb) activeThumb.classList.remove("active-thumbnail");
+        mainThumb.classList.add("active-thumbnail");
+        activeThumb = mainThumb;
+      });
+
+      modalExtraImages.appendChild(mainThumb);
+    }
+
     // Lisäkuvat
-    extraImages.forEach(src=>{
-      const thumb=document.createElement("img");
-      thumb.src=src;
-      thumb.className="img-thumbnail";
-      thumb.style.width="100px";
-      thumb.style.cursor="pointer";
-      thumb.addEventListener("click",()=>modalMainImage.src=src);
+    extraImages.forEach(src => {
+      const thumb = document.createElement("img");
+      thumb.src = src;
+      thumb.className = "img-thumbnail";
+      thumb.style.width = "100px";
+      thumb.style.cursor = "pointer";
+      thumb.style.border = "none"
+      thumb.addEventListener("click", () => {
+        modalMainImage.src = src;
+        if (activeThumb) activeThumb.classList.remove("active-thumbnail");
+        thumb.classList.add("active-thumbnail");
+        activeThumb = thumb;
+      });
       modalExtraImages.appendChild(thumb);
     });
+    
     // Jos ei lisäkuvia, piilotetaan osio
     const infoHTML=Object.entries(info).map(([k,v])=>`<b>${k}:</b> ${v}`).join("<br>");
     modalInfo.innerHTML=infoHTML;
