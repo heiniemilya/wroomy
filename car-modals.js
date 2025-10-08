@@ -9,10 +9,10 @@ const fetchedDetailsCache = {}; // lisätiedot ja lisäkuvat tallessa
 
 // --- Sivukohtaiset korimallit ---
 const pageBodyTypesMap = {
-  "henkiloautot.html": ["Sedan","Hatchback","Fastback","Liftback"],
-  "maastoautot.html": ["Off-road vehicle","SUV","Crossover","SAV","SAC"],
-  "pakettiautot.html": ["Minivan","MPV","Van"],
-  "urheiluautot.html": ["Cabriolet","Coupe","Targa","Roadster","Coupe-Cabriolet"],
+  "henkiloautot.html": ["Sedan", "Hatchback", "Fastback", "Liftback", "Crossover", "SAC", "Cabriolet"],
+  "maastoautot.html": ["Off-road vehicle", "SUV", "SAV"],
+  "pakettiautot.html": ["Minivan", "MPV", "Van"],
+  "sportti-autot.html": ["Coupe", "Roadster", "Targa", "Coupe-Cabriolet"],
   "lava-autot.html": ["Pick-up"],
   "miniautot.html": ["Quadricycle"]
 };
@@ -31,7 +31,7 @@ const manualCarsMap = {
     {id:"man3",title:"Mercedes-Benz V-Class",image:"https://upload.wikimedia.org/wikipedia/commons/a/af/2011_Mercedes-Benz_Viano_%28V_639_MY12%29_Edition_125_CDI_3.0_BlueEFFICIENCY_van_%282015-07-24%29_01.jpg",info:{"Valmistettu":"2021","Korimalli":"Minivan",Ovia:5,Istuimia:8},extraImages:[]},
     {id:"man4",title:"Toyota ProAce",image:"https://upload.wikimedia.org/wikipedia/commons/e/e5/SLM_65_-_Toyota_ProAce.jpg",info:{"Valmistettu":"2022","Korimalli":"Van",Ovia:4,Istuimia:3},extraImages:[]}
   ],
-  "urheiluautot.html": [
+  "sportti-autot.html": [
     {id:"man1",title:"Porsche 911",image:"https://upload.wikimedia.org/wikipedia/commons/1/19/2015_Porsche_911_Carrera_4S_Coupe.jpg",info:{"Valmistettu":"2022","Korimalli":"Coupe",Ovia:2,Istuimia:2},extraImages:[]},
     {id:"man2",title:"Audi R8",image:"https://upload.wikimedia.org/wikipedia/commons/3/36/2015_Audi_R8_Coup%C3%A9_5.2_FSI_quattro_%2819409896583%29.jpg",info:{"Valmistettu":"2021","Korimalli":"Coupe",Ovia:2,Istuimia:2},extraImages:[]},
     {id:"man3",title:"Ferrari Portofino",image:"https://upload.wikimedia.org/wikipedia/commons/9/99/Ferrari_Portofino_IMG_0531.jpg",info:{"Valmistettu":"2020","Korimalli":"Cabriolet",Ovia:2,Istuimia:2},extraImages:[]},
@@ -103,6 +103,29 @@ async function fetchCarsFromAPI(){
     }
   };
 
+  // haetaan yksi testikutsu
+  const response = await fetch(
+    `https://cars-database-with-image.p.rapidapi.com/api/search?q=${selectedBodies[0]}&page=${currentPage}`,
+    options
+  );
+
+  if (!response.ok) {
+    // 429 Too Many Requests
+    if (response.status === 429) {
+      const error = new Error("API quota limit reached");
+      error.status = 429;
+      throw error;
+    }
+
+    // muut virheet
+    const error = new Error("Failed to fetch cars");
+    error.status = response.status;
+    throw error;
+  }
+
+  const data = await response.json();
+  cachedCars = cachedCars.concat(data.results || []);
+
   // Placeholder-kuva
   const placeholder = "https://www.auto-data.net/img/no.jpg";
   // Väliaikainen setti duplikaattien tarkistukseen
@@ -137,6 +160,7 @@ async function fetchCarsFromAPI(){
   currentPage++;
 }
 
+
 // --- Näytä seuraavat 4 autoa välimuistista ---
 function showNextCars(count = 4){
   const nextBatch = cachedCars.slice(currentIndex,currentIndex+count);
@@ -146,17 +170,49 @@ function showNextCars(count = 4){
 
 
 // --- Näytä lisää painike ---
-async function handleLoadMore(){
-  // Estetään moninkertainen klikkaus
+async function handleLoadMore() {
+  const errorMessage = document.getElementById("error-message");
+  errorMessage.textContent = ""; // tyhjennetään vanha virhe
+
   loadMoreBtn.disabled = true;
-  loadMoreBtn.textContent="Ladataan...";
-  // Haetaan lisää autoja apista, jos tarvitaan
-  if(currentIndex >= cachedCars.length){
-    await fetchCarsFromAPI();
+  loadMoreBtn.textContent = "Ladataan...";
+
+  try {
+    // Haetaan lisää autoja apista, jos tarvitaan
+    if (currentIndex >= cachedCars.length) {
+      await fetchCarsFromAPI();
+    }
+
+    showNextCars();
+
+  } catch (error) {
+    console.error("Virhe autojen latauksessa:", error);
+
+    // Tarkistetaan virheilmoituksen sisältö
+    if (error.status === 429 || error.message.includes("quota") || error.message.includes("limit")) {
+      errorMessage.innerHTML = `
+      <span style="font-size: 35px; font-weight: bold; letter-spacing: 1px; font-family: 'Mouse Memoirs", sans-serif';">Hupsista!</span><br>
+      Autoja on katsottu niin ahkerasti, että kirjan sivut ovat päässeet loppumaan. <br> Palaa myöhemmin tutkimaan lisää autoja!`;  
+      loadMoreBtn.disabled = true;
+      loadMoreBtn.style.opacity = "0.6";   
+      loadMoreBtn.style.backgroundColor = "gray";   
+      loadMoreBtn.textContent = "Sivut loppu";
+    } else {
+      errorMessage.innerHTML = `
+      <span style="font-size: 35px; font-weight: bold; letter-spacing: 1px; font-family: 'Mouse Memoirs", sans-serif';">Hmmm...</span><br>
+      Autot taisivat eksyä matkalla. <br> Yritä uudelleen!`;
+      loadMoreBtn.disabled = false;
+      loadMoreBtn.style.opacity = "1";
+      loadMoreBtn.textContent = "Yritä uudelleen ▶▶▶";
+    }
+
+  } finally {
+     // Jos ei ollut quota-virhettä, palautetaan nappi normaaliksi
+     if (!(error && (error.status === 429 || error.message.includes("quota") || error.message.includes("limit")))) {
+      loadMoreBtn.disabled = false;
+      loadMoreBtn.textContent = "Näytä lisää ▶▶▶";
+    }
   }
-  showNextCars();
-  loadMoreBtn.disabled = false;
-  loadMoreBtn.textContent = "Näytä lisää";
 }
 
 // --- Modaali ---
