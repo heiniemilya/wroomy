@@ -417,7 +417,7 @@ h6 {
 
   .navmenu img {
     width: 30px;
-    margin-right: 20px;
+    margin-right: 15px;
     filter: brightness(0) saturate(100%) invert(100%) sepia(100%) saturate(0%) hue-rotate(221deg) brightness(109%) contrast(101%);
   }
 
@@ -715,13 +715,19 @@ h6 {
 }
 
 .footer .copyright p {
+  color: #1d4544;
   margin-bottom: 0;
   font-size: 11px;
 }
 
 .footer .credits {
+  color: #1d4544;
   margin-top: 6px;
   font-size: 11px;
+}
+
+.footer .credits a{
+  color: #1d4544;
 }
 
 /*--------------------------------------------------------------
