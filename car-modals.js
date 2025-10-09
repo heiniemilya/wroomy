@@ -192,6 +192,7 @@ function createCarCard(car){
   card.className = "car-card";
   const img = document.createElement("img");
   img.src = car.image;
+  img.alt = car.alt || `${car.title}, etukuva`;
   const title = document.createElement("div");
   title.className = "car-title";
   title.textContent = car.title.replace(/\s*\(.*?\)/g, '').trim() || "Tuntematon auto";
