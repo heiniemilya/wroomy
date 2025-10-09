@@ -383,15 +383,16 @@ async function openCarModal(car){
       modalExtraImages.appendChild(mainThumb);
   
       // muut lisäkuvat
-      extraImages.forEach(src => {
+      extraImages.forEach(imgObj => {
         const thumb = document.createElement("img");
-        thumb.src = src;
+        thumb.src = imgObj.src;
+        thumb.alt = imgObj.alt || `${car.title} lisäkuva`;
         thumb.className = "img-thumbnail";
         thumb.style.width = "100px";
         thumb.style.cursor = "pointer";
         thumb.addEventListener("click", () => {
-          modalMainImage.src = src;
-          if(activeThumb) activeThumb.classList.remove("active-thumbnail");
+          modalMainImage.src = imgObj.src;
+          if (activeThumb) activeThumb.classList.remove("active-thumbnail");
           thumb.classList.add("active-thumbnail");
           activeThumb = thumb;
         });
