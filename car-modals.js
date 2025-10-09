@@ -224,7 +224,7 @@ async function fetchCarsFromAPI(){
 
   const placeholder = "https://www.auto-data.net/img/no.jpg";
 
-  // jotta emme lisää samoja autoja kahdesti eri kutsuissa ---
+  // Jotta ei lisättäisi samoja autoja kahdesti eri kutsuissa ---
   const seenKeys = new Set();
   cachedCars.forEach(car => {
     const baseTitle = (car.title || "").replace(/\s*\(.*?\)/g, '').trim().toLowerCase();

@@ -39,6 +39,7 @@
       const placeholder = "https://www.auto-data.net/img/no.jpg";
       const seen = new Set();
 
+      //autojen filtteröinti niin ettei samat toistuisi
       cars = data.results.filter(car => {
         const baseModel = car.title?.split('(')[0].trim();
         if (!car.image || car.image === placeholder || seen.has(baseModel)) return false;
