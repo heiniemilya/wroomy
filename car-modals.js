@@ -160,80 +160,70 @@ function displayInitialImages(){
 // --- Hae autoja API:sta ---
 async function fetchCarsFromAPI(){
   let allResults = [];
-  // Valitaan satunnainen määrä korimalleja (1-2)
-  const randomBodyCount = bodyTypes.length > 1 ? Math.floor(Math.random() * 2) + 1 : 1;
-  const selectedBodies = [];
-  // Varmistetaan, että valitut korimallit ovat uniikkeja
-  while(selectedBodies.length<randomBodyCount){
-    const r=bodyTypes[Math.floor(Math.random()*bodyTypes.length)];
-    if(!selectedBodies.includes(r)) selectedBodies.push(r);
-  }
+  // Valitaan yksi satunnainen korimalli
+  const selectedBody = bodyTypes[Math.floor(Math.random() * bodyTypes.length)];
+  const selectedBodies = [selectedBody];
 
-  // API-asetukset
-  const options={
-    method:"GET",
-    headers:{
-      "x-rapidapi-key":"df8ba94c97mshb76f9c896aa0450p1ce858jsnee6b335c4888",
-      "x-rapidapi-host":"cars-database-with-image.p.rapidapi.com"
+  const options = {
+    method: "GET",
+    headers: {
+      "x-rapidapi-key": "010924e3e5mshf6b91441d0c7055p1146c6jsn3a718c9dc7e2",
+      "x-rapidapi-host": "cars-database-with-image.p.rapidapi.com"
     }
   };
 
-  // haetaan yksi testikutsu
-  const response = await fetch(
-    `https://cars-database-with-image.p.rapidapi.com/api/search?q=${selectedBodies[0]}&page=${currentPage}`,
-    options
-  );
-
-  if (!response.ok) {
-    // 429 Too Many Requests
-    if (response.status === 429) {
-      const error = new Error("API quota limit reached");
-      error.status = 429;
-      throw error;
-    }
-
-    // muut virheet
-    const error = new Error("Failed to fetch cars");
-    error.status = response.status;
-    throw error;
-  }
-
-  const data = await response.json();
-  cachedCars = cachedCars.concat(data.results || []);
-
-  // Placeholder-kuva
   const placeholder = "https://www.auto-data.net/img/no.jpg";
-  // Väliaikainen setti duplikaattien tarkistukseen
+
+  // jotta emme lisää samoja autoja kahdesti eri kutsuissa ---
   const seenKeys = new Set();
-  // Haetaan valituilla korimalleilla
+  cachedCars.forEach(car => {
+    const baseTitle = (car.title || "").replace(/\s*\(.*?\)/g, '').trim().toLowerCase();
+    const imageNorm = (car.image || "").split('?')[0].trim().toLowerCase();
+    if (baseTitle || imageNorm) seenKeys.add(`${baseTitle}|${imageNorm}`);
+  });
+
+  // Haetaan valituilla korimalleilla 
   for(const body of selectedBodies){
-    const res = await fetch(`https://cars-database-with-image.p.rapidapi.com/api/search?q=${body}&page=${currentPage}`, options);
+    const res = await fetch(`https://cars-database-with-image.p.rapidapi.com/api/search?q=${encodeURIComponent(body)}&page=${currentPage}`, options);
+    if (!res.ok) {
+      if (res.status === 429) {
+        const err = new Error("API quota limit reached");
+        err.status = 429;
+        throw err;
+      } else {
+        const err = new Error("Failed to fetch cars: " + res.status);
+        err.status = res.status;
+        throw err;
+      }
+    }
     const data = await res.json();
-    // Suodatetaan tulokset
-    if(data.results){
-      // Poimitaan vain uniikit, ei placeholder-kuvia
+
+    if (data.results){
       data.results.forEach(car => {
-        if (car.image && car.image !== placeholder) {
-          const key = `${car.title.trim().toLowerCase()}|${car.content?.slice(0,30) || ""}`;
-          const imageKey = car.image.trim().toLowerCase();
-          const uniqueKey = `${nameKey}|${imageKey}`;
-          // Tarkistetaan onko jo nähty
-          if (!seenKeys.has(uniqueKey)) {
-            seenKeys.add(uniqueKey);
-            allResults.push({
-              id: car.id,
-              title: car.title,
-              image: car.image
-            });
-          }
+        if (!car.image || car.image === placeholder) return; // suodatetaan placeholderit
+        // Normalisoidaan kuva (poista query-string tms.)
+        const imageNorm = car.image.split('?')[0].trim().toLowerCase();
+        const titleNorm = (car.title || "").replace(/\s*\(.*?\)/g, '').trim().toLowerCase();
+        const uniqueKey = `${titleNorm}|${imageNorm}`;
+
+        // Tarkistetaan, ettei ole nähty (ei kaikissa aiemmissa kutsuissa eikä tässä batchissa)
+        if (!seenKeys.has(uniqueKey)) {
+          seenKeys.add(uniqueKey);
+          allResults.push({
+            id: car.id,
+            title: car.title,
+            image: car.image
+          });
         }
       });
     }
   }
+
   // Lisätään välimuistiin
   cachedCars.push(...allResults);
   currentPage++;
 }
+
 
 
 // --- Näytä seuraavat 4 autoa välimuistista ---
@@ -247,10 +237,13 @@ function showNextCars(count = 4){
 // --- Näytä lisää painike ---
 async function handleLoadMore() {
   const errorMessage = document.getElementById("error-message");
-  errorMessage.textContent = ""; // tyhjennetään vanha virhe
+  if (errorMessage) errorMessage.textContent = ""; // tyhjennetään vanha virhe
 
   loadMoreBtn.disabled = true;
   loadMoreBtn.textContent = "Ladataan...";
+  loadMoreBtn.style.opacity = "0.6";
+
+  let fetchError = null;
 
   try {
     // Haetaan lisää autoja apista, jos tarvitaan
@@ -261,34 +254,43 @@ async function handleLoadMore() {
     showNextCars();
 
   } catch (error) {
+    fetchError = error;
     console.error("Virhe autojen latauksessa:", error);
 
-    // Tarkistetaan virheilmoituksen sisältö
-    if (error.status === 429 || error.message.includes("quota") || error.message.includes("limit")) {
-      errorMessage.innerHTML = `
-      <span style="font-size: 35px; font-weight: bold; letter-spacing: 1px; font-family: 'Mouse Memoirs", sans-serif';">Hupsista!</span><br>
-      Autoja on katsottu niin ahkerasti, että kirjan sivut ovat päässeet loppumaan. <br> Palaa myöhemmin tutkimaan lisää autoja!`;  
+    if (error.status === 429 || (error.message && (error.message.toLowerCase().includes("quota") || error.message.toLowerCase().includes("limit")))) {
+      if (errorMessage) {
+        errorMessage.innerHTML = `
+        <span style="font-size: 35px; font-weight: bold;">Hupsista!</span><br>
+        Autoja on katsottu niin ahkerasti, että kirjan sivut ovat päässeet loppumaan. <br> Palaa myöhemmin tutkimaan lisää autoja!`;
+      }
       loadMoreBtn.disabled = true;
-      loadMoreBtn.style.opacity = "0.6";   
-      loadMoreBtn.style.backgroundColor = "gray";   
+      loadMoreBtn.style.opacity = "0.6";
+      loadMoreBtn.style.backgroundColor = "gray";
       loadMoreBtn.textContent = "Sivut loppu";
+      return;
     } else {
-      errorMessage.innerHTML = `
-      <span style="font-size: 35px; font-weight: bold; letter-spacing: 1px; font-family: 'Mouse Memoirs", sans-serif';">Hmmm...</span><br>
-      Autot taisivat eksyä matkalla. <br> Yritä uudelleen!`;
+      if (errorMessage) {
+        errorMessage.innerHTML = `
+        <span style="font-size: 22px; font-weight: bold;">Hmmm...</span><br>
+        Autot taisivat eksyä matkalla. <br> Yritä uudelleen!`;
+      }
+      // anna käyttäjän yrittää uudelleen
       loadMoreBtn.disabled = false;
       loadMoreBtn.style.opacity = "1";
       loadMoreBtn.textContent = "Yritä uudelleen ▶▶▶";
+      return;
     }
 
   } finally {
-     // Jos ei ollut quota-virhettä, palautetaan nappi normaaliksi
-     if (!(error && (error.status === 429 || error.message.includes("quota") || error.message.includes("limit")))) {
+    // jos ei tullut quota- tai muu virhe, palautetaan nappi normaaliin tilaan
+    if (!fetchError) {
       loadMoreBtn.disabled = false;
+      loadMoreBtn.style.opacity = "1";
       loadMoreBtn.textContent = "Näytä lisää ▶▶▶";
     }
   }
 }
+
 
 // --- Modaali ---
 async function openCarModal(car){
@@ -352,7 +354,7 @@ async function openCarModal(car){
       const options = {
         method:"GET",
         headers:{
-          "x-rapidapi-key":"df8ba94c97mshb76f9c896aa0450p1ce858jsnee6b335c4888",
+          "x-rapidapi-key":"010924e3e5mshf6b91441d0c7055p1146c6jsn3a718c9dc7e2",
           "x-rapidapi-host":"cars-database-with-image.p.rapidapi.com"
         }
       };
@@ -378,8 +380,8 @@ async function openCarModal(car){
         // Poimitaan lisäkuvat (max 6)  
         const extraImages = (data.other_images||[]).slice(0,6).map(img=>img.src);
         fetchedDetailsCache[car.id] = {info,extraImages};
-      }catch(e){
-        console.error("Virhe haettaessa lisätietoja",e);
+      }catch(error){
+        console.error("Virhe haettaessa lisätietoja",error);
         fetchedDetailsCache[car.id] = {info:{},extraImages:[]};
       }
     }
