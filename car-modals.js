@@ -97,7 +97,7 @@ const manualCarsMap = {
   "lava-autot.html": [
     {id:"man1",title:"Ford Ranger",
       image:"https://upload.wikimedia.org/wikipedia/commons/0/02/2019_Ford_Ranger_XLT_Super_Cab_FX4_front_6.1.19.jpg",
-      info:{"Valmistettu":"2021","Korimalli":"Pick-up",Ovia:4,Istuimia:5},
+      info:{"Valmistettu":"2021","Korimalli":"Pick-up",Ovia:2,Istuimia:5},
       extraImages:[]},
     {id:"man2",title:"Toyota Hilux",
       image:"https://upload.wikimedia.org/wikipedia/commons/b/ba/2016_Toyota_HiLux_Invincible_D-4D_4WD_2.4_Rear.jpg",
@@ -119,15 +119,15 @@ const manualCarsMap = {
       extraImages:[]},
     {id:"man2",title:"Ligier JS50",
       image:"https://upload.wikimedia.org/wikipedia/commons/7/70/Ligier_JS50_%28MSP15%29.JPG",
-      info:{"Valmistettu":"2020","Korimalli":"Quadricycle",Ovia:2,Istuimia:2},
+      info:{"Valmistettu":"2020","Korimalli":"Quadricycle",Ovia:3,Istuimia:2},
       extraImages:[]},
     {id:"man3",title:"Microcar M.Go",
       image:"https://upload.wikimedia.org/wikipedia/commons/4/42/Microcar_M.GO_Dynamic_%28MSP15%29.JPG",
-      info:{"Valmistettu":"2022","Korimalli":"Quadricycle",Ovia:2,Istuimia:2},
+      info:{"Valmistettu":"2022","Korimalli":"Quadricycle",Ovia:3,Istuimia:4},
       extraImages:[]},
-    {id:"man4",title:"Aixam Mega",
-      image:"https://upload.wikimedia.org/wikipedia/commons/e/e4/Aixam_Mega.JPG",
-      info:{"Valmistettu":"2021","Korimalli":"Quadricycle",Ovia:2,Istuimia:2},
+    {id:"man4",title:"Aixam Mega e-City",
+      image:"https://upload.wikimedia.org/wikipedia/commons/3/3b/MegaCityCar.jpg",
+      info:{"Valmistettu":"2021","Korimalli":"Quadricycle",Ovia:2,Istuimia:4},
       extraImages:[]}
   ]
 };
