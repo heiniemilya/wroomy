@@ -22,115 +22,164 @@ const manualCarsMap = {
   "henkiloautot.html": [
     {id:"man1", title:"Kia Niro Hybrid",
       image:"https://upload.wikimedia.org/wikipedia/commons/e/e1/2017_Kia_Niro_2_S-A_Eco_Hybrid_1.6_Rear.jpg",
+      alt:"Kia Niro Hybrid, takakuva",
       info:{"Valmistettu":"2016 -","Korimalli":"Crossover", Ovia: 5, Istuimia: 5},
-      extraImages:["https://upload.wikimedia.org/wikipedia/commons/c/cc/2022_Kia_Niro_%28facelift%29%2C_rear_5.12.22.jpg", 
-       "https://upload.wikimedia.org/wikipedia/commons/7/7e/2017_Kia_Niro_Interior.jpg"]},
-    {id:"man2",title:"Opel Astra H",image:"https://upload.wikimedia.org/wikipedia/commons/c/c4/Opel_Astra_H_1.6_Twinport_front_20100509.jpg",
-      info:{"Valmistettu":"2004 – 2010 ", "Korimalli":"Hatchback", Ovia:5, Istuimia:5},
-      extraImages:["https://upload.wikimedia.org/wikipedia/commons/b/b0/Opel_Astra_H_1.6_Twinport_rear_20100509.jpg", 
-        "https://upload.wikimedia.org/wikipedia/commons/b/b4/Astra2.JPG"]},
-    {id:"man3",title:"Volkswagen Passat B9",image:"https://upload.wikimedia.org/wikipedia/commons/6/65/Volkswagen_Passat_Variant_B9_1X7A1960.jpg",
+      extraImages:[
+        {src:"https://upload.wikimedia.org/wikipedia/commons/c/cc/2022_Kia_Niro_%28facelift%29%2C_rear_5.12.22.jpg", alt:"Kia Niro Hybrid, lisäkuva 1"},
+        {src:"https://upload.wikimedia.org/wikipedia/commons/7/7e/2017_Kia_Niro_Interior.jpg", alt:"Kia Niro Hybrid, lisäkuva 2"}
+      ]},
+    {id:"man2",title:"Opel Astra H",
+      image:"https://upload.wikimedia.org/wikipedia/commons/c/c4/Opel_Astra_H_1.6_Twinport_front_20100509.jpg",
+      alt:"Opel Astra H, etukuva",
+      info:{"Valmistettu":"2004 – 2010 ","Korimalli":"Hatchback", Ovia:5, Istuimia:5},
+      extraImages:[
+        {src:"https://upload.wikimedia.org/wikipedia/commons/b/b0/Opel_Astra_H_1.6_Twinport_rear_20100509.jpg", alt:"Opel Astra H, lisäkuva 1"},
+        {src:"https://upload.wikimedia.org/wikipedia/commons/b/b4/Astra2.JPG", alt:"Opel Astra H, lisäkuva 2"}
+      ]},
+    {id:"man3",title:"Volkswagen Passat B9",
+      image:"https://upload.wikimedia.org/wikipedia/commons/6/65/Volkswagen_Passat_Variant_B9_1X7A1960.jpg",
+      alt:"Volkswagen Passat B9, etukuva",
       info:{"Valmistettu":"2023 -","Korimalli":"Station wagon", Ovia:5, Istuimia:5},
-      extraImages:["https://upload.wikimedia.org/wikipedia/commons/9/91/Volkswagen_Passat_Variant_B9_IMG_1228.jpg",
-        "https://upload.wikimedia.org/wikipedia/commons/1/13/Volkswagen_Passat_Variant_B9_Automesse_Ludwigsburg_2024_IMG_1640.jpg"]},
+      extraImages:[
+        {src:"https://upload.wikimedia.org/wikipedia/commons/9/91/Volkswagen_Passat_Variant_B9_IMG_1228.jpg", alt:"Volkswagen Passat B9, lisäkuva 1"},
+        {src:"https://upload.wikimedia.org/wikipedia/commons/1/13/Volkswagen_Passat_Variant_B9_Automesse_Ludwigsburg_2024_IMG_1640.jpg", alt:"Volkswagen Passat B9, lisäkuva 2"}
+      ]},
     {id:"man4",title:"Toyota Yaris XP130",
       image:"https://upload.wikimedia.org/wikipedia/commons/e/e1/2017_Toyota_Yaris_%28NCP130R%29_Ascent_5-door_hatchback_%282018-10-22%29_01.jpg",
+      alt:"Toyota Yaris XP130, etukuva",
       info:{"Valmistettu": "2010 - 2019", "Korimalli":"Hatchback", Ovia:3, Istuimia:5},
-      extraImages:["https://upload.wikimedia.org/wikipedia/commons/1/10/2017_Toyota_Yaris_%28NCP130R%29_Ascent_5-door_hatchback_%282018-10-22%29_02.jpg"]}
+      extraImages:[
+        {src:"https://upload.wikimedia.org/wikipedia/commons/1/10/2017_Toyota_Yaris_%28NCP130R%29_Ascent_5-door_hatchback_%282018-10-22%29_02.jpg", alt:"Toyota Yaris XP130, lisäkuva 1"}
+      ]}
   ],
+
   "pakettiautot.html": [
     {id:"man1",title:"Volkswagen Touran",
       image:"https://upload.wikimedia.org/wikipedia/commons/4/40/VW_Touran_Highline_Black_Style.jpg",
+      alt:"Volkswagen Touran, etukuva",
       info:{"Valmistettu":"2003 -","Korimalli":"MPV", Ovia:5, Istuimia:7},
-      extraImages:["https://upload.wikimedia.org/wikipedia/commons/4/42/VW_Touran_2.0_TDI_Facelift_rear.JPG",
-        "https://upload.wikimedia.org/wikipedia/commons/5/5a/Volkswagen_Touran_-_wn%C4%99trze_%28MSP16%29.jpg"]},
+      extraImages:[
+        {src:"https://upload.wikimedia.org/wikipedia/commons/4/42/VW_Touran_2.0_TDI_Facelift_rear.JPG", alt:"Volkswagen Touran, lisäkuva 1"},
+        {src:"https://upload.wikimedia.org/wikipedia/commons/5/5a/Volkswagen_Touran_-_wn%C4%99trze_%28MSP16%29.jpg", alt:"Volkswagen Touran, lisäkuva 2"}
+      ]},
     {id:"man2",title:"Ford Tourneo Connect",
       image:"https://upload.wikimedia.org/wikipedia/commons/d/d1/Ford_Tourneo_Connect_Active_%283rd_generation%29_Leonberg_2022_1X7A0448.jpg",
-      info:{"Valmistettu":"2021 -","Korimalli":"Van",Ovia:5, Istuimia:7},
-      extraImages:["https://upload.wikimedia.org/wikipedia/commons/e/ee/2025_Ford_Transit_Connect_Limited_PHEV_-_1498cc_1.5_%28150PS%29_Plug-in_Hybrid_-_Frozen_White_-_03-2025%2C_Front.jpg",
-        "https://upload.wikimedia.org/wikipedia/commons/8/81/2025_Ford_Transit_Connect_Limited_PHEV_-_1498cc_1.5_%28150PS%29_Plug-in_Hybrid_-_Frozen_White_-_03-2025%2C_Rear.jpg",
-        "https://upload.wikimedia.org/wikipedia/commons/7/70/Ford_Tourneo_Connect_Active_%283rd_generation%29_Auto_Zuerich_2021_IMG_0484.jpg"
+      alt:"Ford Tourneo Connect, takakuva",
+      info:{"Valmistettu":"2021 -","Korimalli":"Van",Ovia:5,Istuimia:7},
+      extraImages:[
+        {src:"https://upload.wikimedia.org/wikipedia/commons/e/ee/2025_Ford_Transit_Connect_Limited_PHEV_-_1498cc_1.5_%28150PS%29_Plug-in_Hybrid_-_Frozen_White_-_03-2025%2C_Front.jpg", alt:"Ford Tourneo Connect, lisäkuva 1"},
+        {src:"https://upload.wikimedia.org/wikipedia/commons/8/81/2025_Ford_Transit_Connect_Limited_PHEV_-_1498cc_1.5_%28150PS%29_Plug-in_Hybrid_-_Frozen_White_-_03-2025%2C_Rear.jpg", alt:"Ford Tourneo Connect, lisäkuva 2"},
+        {src:"https://upload.wikimedia.org/wikipedia/commons/7/70/Ford_Tourneo_Connect_Active_%283rd_generation%29_Auto_Zuerich_2021_IMG_0484.jpg", alt:"Ford Tourneo Connect, lisäkuva 3"}
       ]},
     {id:"man3",title:"Mercedes-Benz V-Class",
       image:"https://upload.wikimedia.org/wikipedia/commons/4/44/Mercedes-Benz_V_250_BlueTEC_Edition_1_Lang_%28V_447%29_%E2%80%93_Frontansicht%2C_18._Oktober_2015%2C_Ratingen.jpg",
+      alt:"Mercedes-Benz V-Class, etukuva",
       info:{"Valmistettu":"2014 - ","Korimalli":"Minivan",Ovia:5,Istuimia:8},
-      extraImages:["https://upload.wikimedia.org/wikipedia/commons/6/64/Mercedes-Benz_V_250_BlueTEC_Edition_1_Lang_%28V_447%29_%E2%80%93_Heckansicht%2C_18._Oktober_2015%2C_Ratingen.jpg"]},
+      extraImages:[
+        {src:"https://upload.wikimedia.org/wikipedia/commons/6/64/Mercedes-Benz_V_250_BlueTEC_Edition_1_Lang_%28V_447%29_%E2%80%93_Heckansicht%2C_18._Oktober_2015%2C_Ratingen.jpg", alt:"Mercedes-Benz V-Class, lisäkuva 1"}
+      ]},
     {id:"man4",title:"Citroën Type H",
       image:"https://upload.wikimedia.org/wikipedia/commons/2/2e/Citro%C3%ABn_Typ_H_1981_grey_vl_TCE.jpg",
+      alt:"Citroën Type H, etukuva",
       info:{"Valmistettu":"1947 – 1981","Korimalli":"Van",Ovia:3,Istuimia:2},
-      extraImages:["https://upload.wikimedia.org/wikipedia/commons/3/34/CitroenHYInt.jpg"]}
+      extraImages:[
+        {src:"https://upload.wikimedia.org/wikipedia/commons/3/34/CitroenHYInt.jpg", alt:"Citroën Type H, lisäkuva 1"}
+      ]}
   ],
+
   "sportti-autot.html": [
     {id:"man1",title:"Porsche 911",
       image:"https://upload.wikimedia.org/wikipedia/commons/1/19/2015_Porsche_911_Carrera_4S_Coupe.jpg",
+      alt:"Porsche 911, etukuva",
       info:{"Valmistettu":"2022","Korimalli":"Coupe",Ovia:2,Istuimia:2},
       extraImages:[]},
     {id:"man2",title:"Audi R8",
       image:"https://upload.wikimedia.org/wikipedia/commons/3/36/2015_Audi_R8_Coup%C3%A9_5.2_FSI_quattro_%2819409896583%29.jpg",
+      alt:"Audi R8, etukuva",
       info:{"Valmistettu":"2021","Korimalli":"Coupe",Ovia:2,Istuimia:2},
       extraImages:[]},
     {id:"man3",title:"Ferrari Portofino",
       image:"https://upload.wikimedia.org/wikipedia/commons/9/99/Ferrari_Portofino_IMG_0531.jpg",
+      alt:"Ferrari Portofino, etukuva",
       info:{"Valmistettu":"2020","Korimalli":"Cabriolet",Ovia:2,Istuimia:2},
       extraImages:[]},
     {id:"man4",title:"Mercedes-AMG GT",
       image:"https://upload.wikimedia.org/wikipedia/commons/4/49/2015-2017_Mercedes-AMG_GT_%28C_190%29_S_coupe_%282017-07-15%29_01.jpg",
+      alt:"Mercedes-AMG GT, etukuva",
       info:{"Valmistettu":"2022","Korimalli":"Coupe",Ovia:2,Istuimia:2},
       extraImages:[]}
   ],
+
   "maastoautot.html": [
     {id:"man1",title:"Jeep Wrangler",
       image:"https://upload.wikimedia.org/wikipedia/commons/f/f4/2018_Jeep_Wrangler_Unlimited_Sport_4-door_front_6.10.18.jpg",
+      alt:"Jeep Wrangler, etukuva",
       info:{"Valmistettu":"2017","Korimalli":"SUV",Ovia:4,Istuimia:5},
       extraImages:[]},
-    {id:"man2",title:"Toyota RAV4",image:"https://upload.wikimedia.org/wikipedia/commons/6/6d/2019_Toyota_RAV4_XLE_AWD%2C_front_12.31.19.jpg",
+    {id:"man2",title:"Toyota RAV4",
+      image:"https://upload.wikimedia.org/wikipedia/commons/6/6d/2019_Toyota_RAV4_XLE_AWD%2C_front_12.31.19.jpg",
+      alt:"Toyota RAV4, etukuva",
       info:{"Valmistettu":"2021","Korimalli":"Crossover",Ovia:5,Istuimia:5},
       extraImages:[]},
-    {id:"man3",title:"Land Rover Discovery",image:"https://upload.wikimedia.org/wikipedia/commons/3/3b/Land_Rover_Discovery_4_HSE_2016.jpg",
+    {id:"man3",title:"Land Rover Discovery",
+      image:"https://upload.wikimedia.org/wikipedia/commons/3/3b/Land_Rover_Discovery_4_HSE_2016.jpg",
+      alt:"Land Rover Discovery, etukuva",
       info:{"Valmistettu":"2019","Korimalli":"SUV",Ovia:5,Istuimia:7},
       extraImages:[]},
     {id:"man4",title:"Nissan X-Trail",
       image:"https://upload.wikimedia.org/wikipedia/commons/3/35/Nissan_X-Trail_%28T33%29_1X7A7179.jpg",
+      alt:"Nissan X-Trail, etukuva",
       info:{"Valmistettu":"2020","Korimalli":"SAV",Ovia:5,Istuimia:5},
       extraImages:[]}
   ],
+
   "lava-autot.html": [
     {id:"man1",title:"Ford Ranger",
       image:"https://upload.wikimedia.org/wikipedia/commons/0/02/2019_Ford_Ranger_XLT_Super_Cab_FX4_front_6.1.19.jpg",
+      alt:"Ford Ranger, etukuva",
       info:{"Valmistettu":"2021","Korimalli":"Pick-up",Ovia:2,Istuimia:5},
       extraImages:[]},
     {id:"man2",title:"Toyota Hilux",
       image:"https://upload.wikimedia.org/wikipedia/commons/b/ba/2016_Toyota_HiLux_Invincible_D-4D_4WD_2.4_Rear.jpg",
+      alt:"Toyota Hilux, takakuva",
       info:{"Valmistettu":"2020","Korimalli":"Pick-up",Ovia:4,Istuimia:5},
       extraImages:[]},
     {id:"man3",title:"Nissan Navara",
       image:"https://upload.wikimedia.org/wikipedia/commons/2/22/Nissan_Navara_Pickup.jpg",
+      alt:"Nissan Navara, etukuva",
       info:{"Valmistettu":"2010","Korimalli":"Pick-up",Ovia:4,Istuimia:5},
       extraImages:[]},
     {id:"man4",title:"Mitsubishi L200",
       image:"https://upload.wikimedia.org/wikipedia/commons/7/78/Mitsubishi_L200_Dakar_HP_2021_%2852325676526%29.jpg",
+      alt:"Mitsubishi L200, etukuva",
       info:{"Valmistettu":"2021","Korimalli":"Pick-up",Ovia:4,Istuimia:5},
       extraImages:[]}
   ],
+
   "miniautot.html": [
     {id:"man1",title:"Renault Twizy",
       image:"https://upload.wikimedia.org/wikipedia/commons/c/c8/Renault_Twizy_electric_car.jpg",
+      alt:"Renault Twizy, sivukuva",
       info:{"Valmistettu":"2021","Korimalli":"Quadricycle",Ovia:2,Istuimia:2},
       extraImages:[]},
     {id:"man2",title:"Ligier JS50",
       image:"https://upload.wikimedia.org/wikipedia/commons/7/70/Ligier_JS50_%28MSP15%29.JPG",
+      alt:"Ligier JS50, etukuva",
       info:{"Valmistettu":"2020","Korimalli":"Quadricycle",Ovia:3,Istuimia:2},
       extraImages:[]},
     {id:"man3",title:"Microcar M.Go",
       image:"https://upload.wikimedia.org/wikipedia/commons/4/42/Microcar_M.GO_Dynamic_%28MSP15%29.JPG",
+      alt:"Microcar M.Go, etukuva",
       info:{"Valmistettu":"2022","Korimalli":"Quadricycle",Ovia:3,Istuimia:4},
       extraImages:[]},
     {id:"man4",title:"Aixam Mega e-City",
       image:"https://upload.wikimedia.org/wikipedia/commons/3/3b/MegaCityCar.jpg",
+      alt:"Aixam Mega e-City, etukuva",
       info:{"Valmistettu":"2021","Korimalli":"Quadricycle",Ovia:2,Istuimia:4},
       extraImages:[]}
   ]
 };
+
 
 // --- Hae nykyinen sivu ---
 const currentPageName = window.location.pathname.split("/").pop();
