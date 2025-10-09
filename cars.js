@@ -91,53 +91,51 @@
   });
   
 
-  // edellinen-nappi
-  prevBtn.addEventListener('click', () => {
-    if (!cars.length) return;
+ // edellinen-nappi
+prevBtn.addEventListener('click', () => {
+  if (!cars.length) return;
 
-    prevBtn.disabled = true;
-    nextBtn.disabled = true;         
-    prevBtn.style.opacity = "0.5";
-    nextBtn.style.opacity = "0.5";
+  prevBtn.disabled = true;
+  nextBtn.disabled = true;         
+  prevBtn.style.opacity = "0.5";
+  nextBtn.style.opacity = "0.5";
 
-    const newIndex = (currentIndex - 1 + cars.length) % cars.length;
-    const newImageSrc = cars[newIndex].image;
+  const newIndex = (currentIndex - 1 + cars.length) % cars.length;
+  imgEl.onload = () => {
+    currentIndex = newIndex;
+    showCar(currentIndex); 
+    prevBtn.style.opacity = "1";
+    nextBtn.style.opacity = "1";
+    prevBtn.disabled = false;
+    nextBtn.disabled = false;
+    imgEl.onload = null;
+  };
 
-    imgEl.onload = () => {
-      currentIndex = newIndex;        
-      prevBtn.style.opacity = "1";
-      nextBtn.style.opacity = "1";
-      prevBtn.disabled = false;
-      nextBtn.disabled = false;
-      imgEl.onload = null;           
-    };
+  imgEl.src = cars[newIndex].image;          
+});
 
-    imgEl.src = newImageSrc;          
-  });
+// seuraava-nappi
+nextBtn.addEventListener('click', () => {
+  if (!cars.length) return;
 
-  // seuraava-nappi
-  nextBtn.addEventListener('click', () => {
-    if (!cars.length) return;
+  prevBtn.disabled = true;
+  nextBtn.disabled = true;
+  prevBtn.style.opacity = "0.5";
+  nextBtn.style.opacity = "0.5";
 
-    prevBtn.disabled = true;
-    nextBtn.disabled = true;
-    prevBtn.style.opacity = "0.5";
-    nextBtn.style.opacity = "0.5";
+  const newIndex = (currentIndex + 1) % cars.length;
+  imgEl.onload = () => {
+    currentIndex = newIndex;
+    showCar(currentIndex); 
+    prevBtn.style.opacity = "1";
+    nextBtn.style.opacity = "1";
+    prevBtn.disabled = false;
+    nextBtn.disabled = false;
+    imgEl.onload = null;
+  };
 
-    const newIndex = (currentIndex + 1) % cars.length;
-    const newImageSrc = cars[newIndex].image;
-
-    imgEl.onload = () => {
-      currentIndex = newIndex;
-      prevBtn.style.opacity = "1";
-      nextBtn.style.opacity = "1";
-      prevBtn.disabled = false;
-      nextBtn.disabled = false;
-      imgEl.onload = null;
-    };
-
-    imgEl.src = newImageSrc;
-  });
+  imgEl.src = cars[newIndex].image;
+});
 
 
 ////////////////////// SATUNNAISET AUTOT /////////////////////
